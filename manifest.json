@@ -1,0 +1,15 @@
+{
+  "name": "Word Search",
+  "short_name": "WordSearch",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff5e6",
+  "theme_color": "#ff7a59",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

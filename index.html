@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Word Search</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">🔎</span>
+        <div>
+          <h1>Word Search</h1>
+          <p>Drag to find the hidden words</p>
+        </div>
+      </div>
+      <div class="controls">
+        <label class="control">
+          Grid size
+          <input id="gridSize" type="number" min="8" max="20" value="12" />
+        </label>
+        <button id="resizeBtn" class="btn">Resize</button>
+        <button id="resetBtn" class="btn secondary">Start Over</button>
+      </div>
+    </header>
+    <button id="menuToggle" class="icon-btn menu-fab" aria-label="Menu">
+      ☰
+    </button>
+
+    <main>
+      <section id="screenMap" class="screen map-screen">
+        <div class="map-header">
+          <div>
+            <h2>Adventure Map</h2>
+            <p>Pick a theme to start your next puzzle.</p>
+          </div>
+          <div class="map-actions">
+            <button id="freePlayBtn" class="btn">Free Play</button>
+            <button id="mapBackBtn" class="btn secondary">Back</button>
+          </div>
+          <div class="map-stats">
+            <div class="stat">
+              <span>Level</span>
+              <strong id="mapLevel">1</strong>
+            </div>
+            <div class="stat">
+              <span>Total Words</span>
+              <strong id="mapTotalWords">0</strong>
+            </div>
+          </div>
+        </div>
+        <div class="map-scene">
+          <svg class="map-trail" viewBox="0 0 1000 600" aria-hidden="true">
+            <path d="M80 90 C 220 30, 360 120, 520 80 S 760 140, 900 90
+                     C 980 140, 920 260, 760 260 S 520 300, 360 240
+                     C 220 200, 140 320, 220 420 S 520 520, 760 440
+                     C 860 400, 940 480, 920 540"
+              fill="none" stroke="rgba(31,27,46,0.2)" stroke-width="6"
+              stroke-linecap="round" stroke-dasharray="2 16"/>
+          </svg>
+          <div class="map-decor flower"></div>
+          <div class="map-decor tree"></div>
+          <div class="map-decor island"></div>
+          <div id="mapGrid" class="map-grid"></div>
+        </div>
+      </section>
+
+      <section id="screenPlay" class="screen screen-active play-screen">
+        <div class="board-panel">
+          <div class="board" id="board"></div>
+          <div class="hint" id="hint">Drag across letters in a straight line.</div>
+        </div>
+
+        <div class="word-panel">
+          <div class="word-header">
+            <div class="score score-inline score-compact">
+              <span>Score</span>
+              <strong id="scoreCount">0</strong>
+            </div>
+            <div class="title-group">
+              <h2 id="themeTitle">Word List</h2>
+              <div id="levelRing" class="level-ring">
+                <span id="levelDisplay">1</span>
+              </div>
+            </div>
+          </div>
+          <span id="xpLabel" class="xp-label">0 / 1000 XP</span>
+          <ul id="wordList" class="word-list"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>Works offline after first load.</small>
+    </footer>
+
+    <div id="menuPanel" class="menu-panel">
+      <div class="menu-card">
+        <h3>Menu</h3>
+        <button id="menuResume" class="btn">Resume</button>
+        <button id="menuResize" class="btn secondary">Resize</button>
+        <button id="menuReset" class="btn secondary">Start Over</button>
+        <button id="menuStats" class="btn secondary">Stats</button>
+        <button id="menuTheme" class="btn secondary">Themes</button>
+        <button id="menuMap" class="btn secondary">Map</button>
+      </div>
+    </div>
+
+    <div id="statsModal" class="modal">
+      <div class="modal-card">
+        <h3>Stats</h3>
+        <div class="stats-grid">
+          <div class="stat">
+            <span>Major Words</span>
+            <strong id="statMajor">0</strong>
+          </div>
+          <div class="stat">
+            <span>Minor Words</span>
+            <strong id="statMinor">0</strong>
+          </div>
+          <div class="stat">
+            <span>Lifetime Words</span>
+            <strong id="statTotal">0</strong>
+          </div>
+          <div class="stat">
+            <span>Time Played</span>
+            <strong id="statTime">0m</strong>
+          </div>
+        </div>
+        <button id="statsClose" class="btn">Close</button>
+      </div>
+    </div>
+
+    <div id="resizeModal" class="modal">
+      <div class="modal-card">
+        <h3>Resize Grid</h3>
+        <label class="control">
+          Grid size (8-20)
+          <input id="resizeInput" type="number" min="8" max="20" value="12" />
+        </label>
+        <button id="resizeSubmit" class="btn">Apply</button>
+        <button id="resizeClose" class="btn secondary">Cancel</button>
+      </div>
+    </div>
+
+    <div id="themeModal" class="modal">
+      <div class="modal-card">
+        <h3>Theme Picker</h3>
+        <div id="themeOptions" class="theme-options"></div>
+        <button id="themeClose" class="btn">Close</button>
+      </div>
+    </div>
+
+    <div id="winScreen" class="modal">
+      <div class="modal-card win-card">
+        <h3>Level Complete!</h3>
+        <p id="winSummary">You found all the words.</p>
+        <div class="stats-grid">
+          <div class="stat">
+            <span>Level</span>
+            <strong id="winLevel">1</strong>
+          </div>
+          <div class="stat">
+            <span>Lifetime Words</span>
+            <strong id="winTotalWords">0</strong>
+          </div>
+        </div>
+        <div class="win-actions">
+          <button id="winNext" class="btn">Next Level</button>
+          <button id="winMap" class="btn secondary">Level Select</button>
+          <button id="winStats" class="btn secondary">Stats</button>
+          <button id="winRetry" class="btn secondary">Retry</button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
