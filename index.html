@@ -4,6 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Word Search</title>
+    <meta name="theme-color" content="#ff7a59" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Word Search" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
     <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -52,19 +57,14 @@
             </div>
           </div>
         </div>
-        <div class="map-scene">
-          <svg class="map-trail" viewBox="0 0 1000 600" aria-hidden="true">
-            <path d="M80 90 C 220 30, 360 120, 520 80 S 760 140, 900 90
-                     C 980 140, 920 260, 760 260 S 520 300, 360 240
-                     C 220 200, 140 320, 220 420 S 520 520, 760 440
-                     C 860 400, 940 480, 920 540"
-              fill="none" stroke="rgba(31,27,46,0.2)" stroke-width="6"
-              stroke-linecap="round" stroke-dasharray="2 16"/>
-          </svg>
-          <div class="map-decor flower"></div>
-          <div class="map-decor tree"></div>
-          <div class="map-decor island"></div>
-          <div id="mapGrid" class="map-grid"></div>
+        <div class="map-content">
+          <div class="globe-wrap">
+            <div id="globe" class="globe" aria-hidden="true">
+              <canvas id="globeCanvas" class="globe-canvas" width="360" height="360"></canvas>
+              <div id="plane" class="plane">✈️</div>
+            </div>
+          </div>
+          <div id="mapList" class="map-list"></div>
         </div>
       </section>
 

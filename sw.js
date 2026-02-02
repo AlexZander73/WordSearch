@@ -1,11 +1,16 @@
 const CACHE_NAME = "wordsearch-v1";
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/styles.css",
-  "/app.js",
-  "/manifest.json",
-  "/icon.svg"
+  "./",
+  "./index.html",
+  "./styles.css",
+  "./app.js",
+  "./manifest.json",
+  "./icon.svg",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./world.svg",
+  "./earth.jpg",
+  "./404.html"
 ];
 
 self.addEventListener("install", (event) => {

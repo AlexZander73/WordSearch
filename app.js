@@ -344,126 +344,168 @@ const THEMES = [
     words: []
   },
   {
-    id: "garden",
-    name: "Garden Bloom",
+    id: "canada",
+    name: "Canada",
     colors: {
-      accent: "#ff7a59",
-      accent2: "#8dd9b8",
-      accent3: "#ffd166",
-      bg: "#fff5e6",
+      accent: "#d94f4f",
+      accent2: "#5fa8ff",
+      accent3: "#ffe59a",
+      bg: "#f7f2ee",
       panel: "#ffffff"
     },
     words: [
-      "FLOWER",
-      "PETAL",
-      "BLOSSOM",
-      "GARDEN",
-      "VINE",
-      "ROSE",
-      "DAISY",
-      "LILAC",
-      "MEADOW",
-      "NECTAR",
-      "SUNLIGHT",
-      "SPROUT",
-      "HONEY",
-      "WILDFLOWER"
-    ]
-  },
-  {
-    id: "mountain",
-    name: "Mountain Hike",
-    colors: {
-      accent: "#4f9cff",
-      accent2: "#79c2a0",
-      accent3: "#b4e1ff",
-      bg: "#eef6ff",
-      panel: "#ffffff"
-    },
-    words: [
-      "SUMMIT",
-      "RIDGE",
-      "TRAIL",
-      "PEAK",
-      "BOULDER",
+      "MAPLE",
+      "SNOW",
+      "IGLOO",
+      "AURORA",
+      "ROCKIES",
+      "BEAVER",
+      "RIVER",
       "FOREST",
-      "PINE",
-      "CANYON",
-      "VALLEY",
-      "CAMPSITE",
       "CABIN",
-      "SHELTER",
-      "MAP",
-      "HIKE"
+      "GLACIER",
+      "TORONTO",
+      "CANOE",
+      "MOOSE",
+      "NORTH"
     ]
   },
   {
-    id: "coast",
-    name: "Coastal Breeze",
+    id: "uk",
+    name: "United Kingdom",
     colors: {
-      accent: "#42b7b2",
-      accent2: "#ffb347",
-      accent3: "#a6e3ff",
-      bg: "#f2fbff",
+      accent: "#2b6df6",
+      accent2: "#f56a6a",
+      accent3: "#ffe59a",
+      bg: "#f2f6ff",
       panel: "#ffffff"
     },
     words: [
-      "OCEAN",
-      "WAVE",
-      "TIDE",
-      "SHELL",
-      "CORAL",
+      "LONDON",
+      "CASTLE",
+      "BRIDGE",
+      "HIGHLAND",
+      "TEA",
+      "RAIN",
+      "RIVER",
+      "MUSEUM",
       "HARBOR",
-      "SEAGULL",
-      "SUNSET",
-      "SAND",
-      "BREEZE",
-      "COAST",
-      "LIGHTHOUSE",
       "ISLAND",
-      "BOAT"
+      "GARDEN",
+      "TOWER",
+      "TAXI",
+      "ABBEY"
     ]
   },
   {
-    id: "meadow",
-    name: "Meadow Magic",
+    id: "europe",
+    name: "Europe",
     colors: {
-      accent: "#ff9ac2",
-      accent2: "#8ad3b5",
+      accent: "#ff9f45",
+      accent2: "#6bc8b0",
       accent3: "#ffd166",
-      bg: "#fff0f6",
+      bg: "#fff6ec",
       panel: "#ffffff"
     },
     words: [
-      "MEADOW",
-      "BUTTERFLY",
-      "BREEZE",
-      "WILD",
-      "FIELD",
-      "NEST",
-      "BLOSSOM",
-      "CLOVER",
-      "CREEK",
-      "SKY",
-      "SUN",
-      "BIRD",
-      "RAINBOW",
-      "GRASS"
+      "PARIS",
+      "CANAL",
+      "ALPS",
+      "CASTLE",
+      "PIAZZA",
+      "TRAIN",
+      "MUSEUM",
+      "BISTRO",
+      "BRIDGE",
+      "MARKET",
+      "RIVER",
+      "GARDEN",
+      "SQUARE",
+      "TRAM"
+    ]
+  },
+  {
+    id: "japan",
+    name: "Japan",
+    colors: {
+      accent: "#ff6fa9",
+      accent2: "#6bc0ff",
+      accent3: "#ffe7a6",
+      bg: "#fff4f8",
+      panel: "#ffffff"
+    },
+    words: [
+      "SAKURA",
+      "TEMPLE",
+      "TORII",
+      "RAMEN",
+      "TOKYO",
+      "KYOTO",
+      "OSAKA",
+      "SHRINE",
+      "GARDEN",
+      "SUSHI",
+      "BAMBOO",
+      "MANGA",
+      "FUJI",
+      "ONSEN"
+    ]
+  },
+  {
+    id: "australia",
+    name: "Australia",
+    colors: {
+      accent: "#ff8f4f",
+      accent2: "#4fb5a8",
+      accent3: "#ffd166",
+      bg: "#fff4e6",
+      panel: "#ffffff"
+    },
+    words: [
+      "KANGAROO",
+      "KOALA",
+      "OUTBACK",
+      "CORAL",
+      "BEACH",
+      "SYDNEY",
+      "MELBOURNE",
+      "BRISBANE",
+      "REEF",
+      "SURF",
+      "DIDGERIDOO",
+      "ULURU",
+      "RAINFOREST",
+      "WOMBAT"
     ]
   }
 ];
 
 const CAMPAIGN_LEVELS = [
-  { themeId: "garden", gridSize: 10, words: 7, label: "Bloom Path" },
-  { themeId: "garden", gridSize: 11, words: 8, label: "Petal Run" },
-  { themeId: "garden", gridSize: 12, words: 9, label: "Hedge Maze" },
-  { themeId: "mountain", gridSize: 11, words: 8, label: "Trailhead" },
-  { themeId: "mountain", gridSize: 12, words: 9, label: "Ridge Walk" },
-  { themeId: "mountain", gridSize: 13, words: 10, label: "Summit Push" },
-  { themeId: "coast", gridSize: 11, words: 8, label: "Seaside" },
-  { themeId: "coast", gridSize: 12, words: 9, label: "Harbor Light" },
-  { themeId: "coast", gridSize: 13, words: 10, label: "Open Water" },
-  { themeId: "meadow", gridSize: 12, words: 9, label: "Soft Breeze" }
+  { themeId: "canada", city: "Halifax", country: "Canada", lat: 44.65, lon: -63.57, gridSize: 10, words: 7 },
+  { themeId: "canada", city: "Quebec City", country: "Canada", lat: 46.81, lon: -71.21, gridSize: 10, words: 8 },
+  { themeId: "canada", city: "Montreal", country: "Canada", lat: 45.5, lon: -73.57, gridSize: 11, words: 8 },
+  { themeId: "canada", city: "Ottawa", country: "Canada", lat: 45.42, lon: -75.69, gridSize: 11, words: 9 },
+  { themeId: "canada", city: "Toronto", country: "Canada", lat: 43.65, lon: -79.38, gridSize: 12, words: 9 },
+  { themeId: "uk", city: "London", country: "UK", lat: 51.51, lon: -0.13, gridSize: 11, words: 9 },
+  { themeId: "uk", city: "Manchester", country: "UK", lat: 53.48, lon: -2.24, gridSize: 12, words: 9 },
+  { themeId: "uk", city: "Cardiff", country: "UK", lat: 51.48, lon: -3.18, gridSize: 12, words: 10 },
+  { themeId: "uk", city: "Edinburgh", country: "UK", lat: 55.95, lon: -3.19, gridSize: 12, words: 10 },
+  { themeId: "uk", city: "Belfast", country: "UK", lat: 54.6, lon: -5.93, gridSize: 13, words: 10 },
+  { themeId: "europe", city: "Paris", country: "France", lat: 48.86, lon: 2.35, gridSize: 12, words: 10 },
+  { themeId: "europe", city: "Amsterdam", country: "Netherlands", lat: 52.37, lon: 4.9, gridSize: 12, words: 10 },
+  { themeId: "europe", city: "Berlin", country: "Germany", lat: 52.52, lon: 13.41, gridSize: 13, words: 11 },
+  { themeId: "europe", city: "Rome", country: "Italy", lat: 41.9, lon: 12.5, gridSize: 13, words: 11 },
+  { themeId: "europe", city: "Barcelona", country: "Spain", lat: 41.39, lon: 2.17, gridSize: 13, words: 11 },
+  { themeId: "japan", city: "Tokyo", country: "Japan", lat: 35.68, lon: 139.76, gridSize: 12, words: 11 },
+  { themeId: "japan", city: "Kyoto", country: "Japan", lat: 35.01, lon: 135.77, gridSize: 12, words: 11 },
+  { themeId: "japan", city: "Osaka", country: "Japan", lat: 34.69, lon: 135.5, gridSize: 12, words: 11 },
+  { themeId: "japan", city: "Sapporo", country: "Japan", lat: 43.06, lon: 141.35, gridSize: 13, words: 12 },
+  { themeId: "japan", city: "Okinawa", country: "Japan", lat: 26.21, lon: 127.68, gridSize: 13, words: 12 },
+  { themeId: "australia", city: "Sydney", country: "Australia", lat: -33.87, lon: 151.21, gridSize: 12, words: 12 },
+  { themeId: "australia", city: "Melbourne", country: "Australia", lat: -37.81, lon: 144.96, gridSize: 12, words: 12 },
+  { themeId: "australia", city: "Brisbane", country: "Australia", lat: -27.47, lon: 153.02, gridSize: 13, words: 12 },
+  { themeId: "australia", city: "Adelaide", country: "Australia", lat: -34.93, lon: 138.6, gridSize: 13, words: 12 },
+  { themeId: "australia", city: "Perth", country: "Australia", lat: -31.95, lon: 115.86, gridSize: 13, words: 12 }
 ];
 
 const boardEl = document.getElementById("board");
@@ -503,7 +545,10 @@ const levelRing = document.getElementById("levelRing");
 const xpLabel = document.getElementById("xpLabel");
 const wordPanel = document.querySelector(".word-panel");
 const themeTitle = document.getElementById("themeTitle");
-const mapGrid = document.getElementById("mapGrid");
+const mapList = document.getElementById("mapList");
+const globeEl = document.getElementById("globe");
+const globeCanvas = document.getElementById("globeCanvas");
+const planeEl = document.getElementById("plane");
 const mapLevel = document.getElementById("mapLevel");
 const mapTotalWords = document.getElementById("mapTotalWords");
 const freePlayBtn = document.getElementById("freePlayBtn");
@@ -543,6 +588,23 @@ let currentLevelIndex = 0;
 let lastTick = Date.now();
 let xpPinned = false;
 let returnToWin = false;
+let globePins = [];
+let globeRotation = 0;
+let globeTargetRotation = 0;
+let globeAnimating = false;
+let travelAnimation = null;
+let globeZoomed = false;
+let lastPinIndex = null;
+let dragActive = false;
+let dragMoved = false;
+let dragStartX = 0;
+let dragStartRotation = 0;
+let inertiaVelocity = 0;
+let lastDragX = 0;
+let lastDragTime = 0;
+let earthTexture = null;
+let earthImageData = null;
+let lastRenderedRotation = null;
 
 const stats = loadStats();
 applyTheme(findTheme(stats.themeId) || activeTheme);
@@ -968,8 +1030,10 @@ function showScreen(screen) {
   if (screen === "map") {
     screenMap.classList.add("screen-active");
     renderMap();
+    startGlobe();
   } else {
     screenPlay.classList.add("screen-active");
+    stopGlobe();
   }
 }
 
@@ -986,28 +1050,57 @@ function startCampaignLevel(index) {
 }
 
 function renderMap() {
-  mapGrid.innerHTML = "";
+  mapList.innerHTML = "";
+  globeEl.querySelectorAll(".pin").forEach((pin) => pin.remove());
+  globePins = [];
   mapLevel.textContent = String(stats.level);
   mapTotalWords.textContent = String(stats.totalWords);
   CAMPAIGN_LEVELS.forEach((level, index) => {
-    const card = document.createElement("div");
-    card.className = "map-card";
+    const item = document.createElement("div");
+    item.className = "map-item";
     const theme = findTheme(level.themeId);
     const unlocked = index <= stats.campaignUnlocked;
     const completed = stats.campaignCompleted.includes(index);
-    card.innerHTML = `
-      <div class="pill">${completed ? "Completed" : unlocked ? "Unlocked" : "Locked"}</div>
-      <strong>${theme ? theme.name : "Theme"}</strong>
-      <small>${level.label}</small>
-      <small>Grid ${level.gridSize} · ${level.words} words</small>
+    item.dataset.level = String(index);
+    if (!unlocked) item.classList.add("locked");
+    if (index === currentLevelIndex) item.classList.add("current");
+    item.innerHTML = `
+      <strong>${level.city}, ${level.country}</strong>
+      <small>${theme ? theme.name : "Theme"} · Grid ${level.gridSize} · ${level.words} words</small>
+      <small>${completed ? "Completed" : unlocked ? "Unlocked" : "Locked"}</small>
     `;
-    if (unlocked) {
-      card.addEventListener("click", () => startCampaignLevel(index));
-    } else {
-      card.style.opacity = "0.45";
-    }
-    mapGrid.appendChild(card);
+    item.addEventListener("click", () => {
+      focusGlobeOnLevel(index);
+      moveLevelToTop(index);
+      if (unlocked) {
+        startCampaignLevel(index);
+      }
+    });
+    mapList.appendChild(item);
+
+    const pin = document.createElement("div");
+    pin.className = "pin";
+    if (!unlocked) pin.classList.add("locked");
+    if (index === currentLevelIndex) pin.classList.add("current");
+    pin.dataset.index = String(index);
+    pin.addEventListener("click", (event) => {
+      event.stopPropagation();
+      focusGlobeOnLevel(index);
+      moveLevelToTop(index);
+      if (globeZoomed && lastPinIndex === index) {
+        setGlobeZoom(false);
+      } else {
+        setGlobeZoom(true);
+      }
+      lastPinIndex = index;
+      if (unlocked) {
+        startCampaignLevel(index);
+      }
+    });
+    globeEl.appendChild(pin);
+    globePins.push({ el: pin, level });
   });
+  focusGlobeOnLevel(currentLevelIndex);
 }
 
 function completeRound() {
@@ -1047,6 +1140,238 @@ function renderThemeOptions() {
     });
     themeOptions.appendChild(card);
   });
+}
+
+function toRadians(deg) {
+  return (deg * Math.PI) / 180;
+}
+
+function latLonToVec(lat, lon, rotation) {
+  const latRad = toRadians(lat);
+  const lonRad = toRadians(lon) + rotation;
+  const x = Math.cos(latRad) * Math.sin(lonRad);
+  const y = Math.sin(latRad);
+  const z = Math.cos(latRad) * Math.cos(lonRad);
+  return { x, y, z };
+}
+
+function loadEarthTexture() {
+  const img = new Image();
+  img.src = "earth.jpg";
+  img.onload = () => {
+    earthTexture = img;
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    earthImageData = ctx.getImageData(0, 0, img.width, img.height);
+    renderGlobeTexture(globeRotation);
+  };
+}
+
+function renderGlobeTexture(rotation) {
+  if (!globeCanvas || !earthImageData) return;
+  const rect = globeEl.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const target = Math.max(240, Math.floor(rect.width * dpr));
+  if (globeCanvas.width !== target) {
+    globeCanvas.width = target;
+    globeCanvas.height = target;
+  }
+  const ctx = globeCanvas.getContext("2d");
+  const size = globeCanvas.width;
+  const imgData = ctx.createImageData(size, size);
+  const data = imgData.data;
+  const tex = earthImageData.data;
+  const texW = earthImageData.width;
+  const texH = earthImageData.height;
+  const half = size / 2;
+  const light = { x: -0.2, y: 0.1, z: 1 };
+  const lightLen = Math.sqrt(light.x ** 2 + light.y ** 2 + light.z ** 2) || 1;
+  const lx = light.x / lightLen;
+  const ly = light.y / lightLen;
+  const lz = light.z / lightLen;
+  for (let y = 0; y < size; y += 1) {
+    const ny = 1 - (y + 0.5) / half;
+    for (let x = 0; x < size; x += 1) {
+      const nx = (x + 0.5) / half - 1;
+      const r2 = nx * nx + ny * ny;
+      const idx = (y * size + x) * 4;
+      if (r2 > 1) {
+        data[idx + 3] = 0;
+        continue;
+      }
+      const z = Math.sqrt(1 - r2);
+      const lon = Math.atan2(nx, z) + rotation;
+      const lat = Math.asin(ny);
+      let u = lon / (2 * Math.PI) + 0.5;
+      u -= Math.floor(u);
+      const v = 0.5 - lat / Math.PI;
+      const texX = Math.floor(u * (texW - 1));
+      const texY = Math.floor(v * (texH - 1));
+      const tIdx = (texY * texW + texX) * 4;
+      const shade = Math.max(0.25, nx * lx + ny * ly + z * lz);
+      const shadow = 0.65 + 0.35 * shade;
+      data[idx] = tex[tIdx] * shadow;
+      data[idx + 1] = tex[tIdx + 1] * shadow;
+      data[idx + 2] = tex[tIdx + 2] * shadow;
+      data[idx + 3] = 255;
+    }
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
+
+function projectToGlobe(vec, radius, centerX, centerY) {
+  const x = centerX + vec.x * radius;
+  const y = centerY - vec.y * radius * 0.9;
+  const scale = 0.6 + (vec.z + 1) * 0.2;
+  return { x, y, scale, z: vec.z };
+}
+
+function updateGlobe() {
+  if (!globeEl) return;
+  const rect = globeEl.getBoundingClientRect();
+  const radius = rect.width / 2;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  renderGlobeTexture(globeRotation);
+  globePins.forEach(({ el, level }) => {
+    const vec = latLonToVec(level.lat, level.lon, globeRotation);
+    const point = projectToGlobe(vec, radius, centerX, centerY);
+    el.style.left = `${point.x}px`;
+    el.style.top = `${point.y}px`;
+    el.style.transform = `translate(-50%, -50%) scale(${point.scale})`;
+    el.style.opacity = point.z > 0 ? "1" : "0.15";
+    el.style.pointerEvents = point.z > 0 ? "auto" : "none";
+  });
+  if (planeEl && planeEl.classList.contains("active") && travelAnimation) {
+    const { position } = travelAnimation;
+    planeEl.style.left = `${position.x}px`;
+    planeEl.style.top = `${position.y}px`;
+  }
+}
+
+function focusGlobeOnLevel(index) {
+  const level = CAMPAIGN_LEVELS[index];
+  if (!level) return;
+  globeTargetRotation = -toRadians(level.lon);
+}
+
+function startGlobe() {
+  if (globeAnimating) return;
+  globeAnimating = true;
+  const tick = () => {
+    if (!globeAnimating) return;
+    const diff = globeTargetRotation - globeRotation;
+    if (!dragActive && Math.abs(inertiaVelocity) > 0.0001) {
+      globeRotation += inertiaVelocity;
+      inertiaVelocity *= 0.94;
+    } else if (!dragActive) {
+      globeRotation += diff * 0.08;
+    }
+    updateGlobe();
+    requestAnimationFrame(tick);
+  };
+  tick();
+}
+
+function stopGlobe() {
+  globeAnimating = false;
+}
+
+function moveLevelToTop(index) {
+  const item = mapList.querySelector(`[data-level='${index}']`);
+  if (item) {
+    mapList.prepend(item);
+  }
+}
+
+function setGlobeZoom(zoomed) {
+  globeZoomed = zoomed;
+  globeEl.classList.toggle("zoomed", zoomed);
+}
+
+function handleGlobePointerDown(event) {
+  dragActive = true;
+  dragMoved = false;
+  dragStartX = event.clientX;
+  dragStartRotation = globeRotation;
+  globeTargetRotation = globeRotation;
+  inertiaVelocity = 0;
+  lastDragX = event.clientX;
+  lastDragTime = performance.now();
+}
+
+function handleGlobePointerMove(event) {
+  if (!dragActive) return;
+  const dx = event.clientX - dragStartX;
+  if (Math.abs(dx) > 6) dragMoved = true;
+  globeRotation = dragStartRotation + dx * 0.006;
+  globeTargetRotation = globeRotation;
+  updateGlobe();
+  const now = performance.now();
+  const deltaX = event.clientX - lastDragX;
+  const deltaT = Math.max(16, now - lastDragTime);
+  inertiaVelocity = (deltaX * 0.006) / (deltaT / 16);
+  lastDragX = event.clientX;
+  lastDragTime = now;
+}
+
+function handleGlobePointerUp() {
+  dragActive = false;
+}
+
+function slerp(a, b, t) {
+  const dot = a.x * b.x + a.y * b.y + a.z * b.z;
+  const clamped = Math.max(-1, Math.min(1, dot));
+  const theta = Math.acos(clamped) * t;
+  const rel = {
+    x: b.x - a.x * clamped,
+    y: b.y - a.y * clamped,
+    z: b.z - a.z * clamped
+  };
+  const relLen = Math.sqrt(rel.x ** 2 + rel.y ** 2 + rel.z ** 2) || 1;
+  const relNorm = { x: rel.x / relLen, y: rel.y / relLen, z: rel.z / relLen };
+  return {
+    x: a.x * Math.cos(theta) + relNorm.x * Math.sin(theta),
+    y: a.y * Math.cos(theta) + relNorm.y * Math.sin(theta),
+    z: a.z * Math.cos(theta) + relNorm.z * Math.sin(theta)
+  };
+}
+
+function animateTravel(fromIndex, toIndex, onDone) {
+  const from = CAMPAIGN_LEVELS[fromIndex];
+  const to = CAMPAIGN_LEVELS[toIndex];
+  if (!from || !to) return;
+  focusGlobeOnLevel(fromIndex);
+  globeTargetRotation = globeRotation;
+  const rect = globeEl.getBoundingClientRect();
+  const radius = rect.width / 2;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  const rotation = globeRotation;
+  const startVec = latLonToVec(from.lat, from.lon, rotation);
+  const endVec = latLonToVec(to.lat, to.lon, rotation);
+  const startTime = performance.now();
+  const duration = 2400;
+  planeEl.classList.add("active");
+  const step = (now) => {
+    const t = Math.min(1, (now - startTime) / duration);
+    const vec = slerp(startVec, endVec, t);
+    const point = projectToGlobe(vec, radius, centerX, centerY);
+    travelAnimation = { position: point };
+    updateGlobe();
+    if (t < 1) {
+      requestAnimationFrame(step);
+    } else {
+      planeEl.classList.remove("active");
+      travelAnimation = null;
+      focusGlobeOnLevel(toIndex);
+      if (onDone) onDone();
+    }
+  };
+  requestAnimationFrame(step);
 }
 
 function tickTime() {
@@ -1162,7 +1487,8 @@ winNext.addEventListener("click", () => {
   if (mode === "campaign") {
     const next = currentLevelIndex + 1;
     if (next < CAMPAIGN_LEVELS.length) {
-      startCampaignLevel(next);
+      showScreen("map");
+      animateTravel(currentLevelIndex, next, () => startCampaignLevel(next));
     } else {
       showScreen("map");
     }
@@ -1194,10 +1520,34 @@ renderMap();
 rebuild();
 updateXpUI();
 renderThemeOptions();
+loadEarthTexture();
+
+globeEl.addEventListener("pointerdown", handleGlobePointerDown);
+globeEl.addEventListener("pointermove", handleGlobePointerMove);
+globeEl.addEventListener("pointerup", handleGlobePointerUp);
+globeEl.addEventListener("pointerleave", handleGlobePointerUp);
+globeEl.addEventListener("click", () => {
+  if (dragMoved) return;
+  if (globeZoomed) {
+    setGlobeZoom(false);
+    lastPinIndex = null;
+  }
+});
 
 setInterval(tickTime, 1000);
 window.addEventListener("beforeunload", () => {
   tickTime();
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    tickTime();
+    saveStats();
+  }
+});
+
+window.addEventListener("resize", () => {
+  updateGlobe();
 });
 
 if ("serviceWorker" in navigator) {
