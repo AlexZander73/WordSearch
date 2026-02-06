@@ -330,6 +330,21 @@ const MINOR_WORDS = [
 ].map((word) => word.toUpperCase());
 const MINOR_WORD_SET = new Set(MINOR_WORDS);
 
+async function loadMinorWords() {
+  try {
+    const response = await fetch("data/minor-words.txt");
+    if (!response.ok) return;
+    const text = await response.text();
+    text
+      .split(/\r?\n/)
+      .map((word) => word.trim().toUpperCase())
+      .filter((word) => word.length >= 3)
+      .forEach((word) => MINOR_WORD_SET.add(word));
+  } catch (error) {
+    // Keep the built-in list if the larger list fails to load.
+  }
+}
+
 const THEMES = [
   {
     id: "none",
@@ -342,171 +357,564 @@ const THEMES = [
       panel: "#ffffff"
     },
     words: []
-  },
-  {
-    id: "canada",
-    name: "Canada",
-    colors: {
-      accent: "#d94f4f",
-      accent2: "#5fa8ff",
-      accent3: "#ffe59a",
-      bg: "#f7f2ee",
-      panel: "#ffffff"
-    },
-    words: [
-      "MAPLE",
-      "SNOW",
-      "IGLOO",
-      "AURORA",
-      "ROCKIES",
-      "BEAVER",
-      "RIVER",
-      "FOREST",
-      "CABIN",
-      "GLACIER",
-      "TORONTO",
-      "CANOE",
-      "MOOSE",
-      "NORTH"
-    ]
-  },
-  {
-    id: "uk",
-    name: "United Kingdom",
-    colors: {
-      accent: "#2b6df6",
-      accent2: "#f56a6a",
-      accent3: "#ffe59a",
-      bg: "#f2f6ff",
-      panel: "#ffffff"
-    },
-    words: [
-      "LONDON",
-      "CASTLE",
-      "BRIDGE",
-      "HIGHLAND",
-      "TEA",
-      "RAIN",
-      "RIVER",
-      "MUSEUM",
-      "HARBOR",
-      "ISLAND",
-      "GARDEN",
-      "TOWER",
-      "TAXI",
-      "ABBEY"
-    ]
-  },
-  {
-    id: "europe",
-    name: "Europe",
-    colors: {
-      accent: "#ff9f45",
-      accent2: "#6bc8b0",
-      accent3: "#ffd166",
-      bg: "#fff6ec",
-      panel: "#ffffff"
-    },
-    words: [
-      "PARIS",
-      "CANAL",
-      "ALPS",
-      "CASTLE",
-      "PIAZZA",
-      "TRAIN",
-      "MUSEUM",
-      "BISTRO",
-      "BRIDGE",
-      "MARKET",
-      "RIVER",
-      "GARDEN",
-      "SQUARE",
-      "TRAM"
-    ]
-  },
-  {
-    id: "japan",
-    name: "Japan",
-    colors: {
-      accent: "#ff6fa9",
-      accent2: "#6bc0ff",
-      accent3: "#ffe7a6",
-      bg: "#fff4f8",
-      panel: "#ffffff"
-    },
-    words: [
-      "SAKURA",
-      "TEMPLE",
-      "TORII",
-      "RAMEN",
-      "TOKYO",
-      "KYOTO",
-      "OSAKA",
-      "SHRINE",
-      "GARDEN",
-      "SUSHI",
-      "BAMBOO",
-      "MANGA",
-      "FUJI",
-      "ONSEN"
-    ]
-  },
-  {
-    id: "australia",
-    name: "Australia",
-    colors: {
-      accent: "#ff8f4f",
-      accent2: "#4fb5a8",
-      accent3: "#ffd166",
-      bg: "#fff4e6",
-      panel: "#ffffff"
-    },
-    words: [
-      "KANGAROO",
-      "KOALA",
-      "OUTBACK",
-      "CORAL",
-      "BEACH",
-      "SYDNEY",
-      "MELBOURNE",
-      "BRISBANE",
-      "REEF",
-      "SURF",
-      "DIDGERIDOO",
-      "ULURU",
-      "RAINFOREST",
-      "WOMBAT"
-    ]
   }
 ];
 
-const CAMPAIGN_LEVELS = [
-  { themeId: "canada", city: "Halifax", country: "Canada", lat: 44.65, lon: -63.57, gridSize: 10, words: 7 },
-  { themeId: "canada", city: "Quebec City", country: "Canada", lat: 46.81, lon: -71.21, gridSize: 10, words: 8 },
-  { themeId: "canada", city: "Montreal", country: "Canada", lat: 45.5, lon: -73.57, gridSize: 11, words: 8 },
-  { themeId: "canada", city: "Ottawa", country: "Canada", lat: 45.42, lon: -75.69, gridSize: 11, words: 9 },
-  { themeId: "canada", city: "Toronto", country: "Canada", lat: 43.65, lon: -79.38, gridSize: 12, words: 9 },
-  { themeId: "uk", city: "London", country: "UK", lat: 51.51, lon: -0.13, gridSize: 11, words: 9 },
-  { themeId: "uk", city: "Manchester", country: "UK", lat: 53.48, lon: -2.24, gridSize: 12, words: 9 },
-  { themeId: "uk", city: "Cardiff", country: "UK", lat: 51.48, lon: -3.18, gridSize: 12, words: 10 },
-  { themeId: "uk", city: "Edinburgh", country: "UK", lat: 55.95, lon: -3.19, gridSize: 12, words: 10 },
-  { themeId: "uk", city: "Belfast", country: "UK", lat: 54.6, lon: -5.93, gridSize: 13, words: 10 },
-  { themeId: "europe", city: "Paris", country: "France", lat: 48.86, lon: 2.35, gridSize: 12, words: 10 },
-  { themeId: "europe", city: "Amsterdam", country: "Netherlands", lat: 52.37, lon: 4.9, gridSize: 12, words: 10 },
-  { themeId: "europe", city: "Berlin", country: "Germany", lat: 52.52, lon: 13.41, gridSize: 13, words: 11 },
-  { themeId: "europe", city: "Rome", country: "Italy", lat: 41.9, lon: 12.5, gridSize: 13, words: 11 },
-  { themeId: "europe", city: "Barcelona", country: "Spain", lat: 41.39, lon: 2.17, gridSize: 13, words: 11 },
-  { themeId: "japan", city: "Tokyo", country: "Japan", lat: 35.68, lon: 139.76, gridSize: 12, words: 11 },
-  { themeId: "japan", city: "Kyoto", country: "Japan", lat: 35.01, lon: 135.77, gridSize: 12, words: 11 },
-  { themeId: "japan", city: "Osaka", country: "Japan", lat: 34.69, lon: 135.5, gridSize: 12, words: 11 },
-  { themeId: "japan", city: "Sapporo", country: "Japan", lat: 43.06, lon: 141.35, gridSize: 13, words: 12 },
-  { themeId: "japan", city: "Okinawa", country: "Japan", lat: 26.21, lon: 127.68, gridSize: 13, words: 12 },
-  { themeId: "australia", city: "Sydney", country: "Australia", lat: -33.87, lon: 151.21, gridSize: 12, words: 12 },
-  { themeId: "australia", city: "Melbourne", country: "Australia", lat: -37.81, lon: 144.96, gridSize: 12, words: 12 },
-  { themeId: "australia", city: "Brisbane", country: "Australia", lat: -27.47, lon: 153.02, gridSize: 13, words: 12 },
-  { themeId: "australia", city: "Adelaide", country: "Australia", lat: -34.93, lon: 138.6, gridSize: 13, words: 12 },
-  { themeId: "australia", city: "Perth", country: "Australia", lat: -31.95, lon: 115.86, gridSize: 13, words: 12 }
+const PALETTES = {
+  americas: { accent: "#ff7a59", accent2: "#4f9cff", accent3: "#ffd166", bg: "#fff5e6", panel: "#ffffff" },
+  europe: { accent: "#2b6df6", accent2: "#f56a6a", accent3: "#ffe59a", bg: "#f2f6ff", panel: "#ffffff" },
+  africa: { accent: "#ff9f45", accent2: "#6bc8b0", accent3: "#ffd166", bg: "#fff6ec", panel: "#ffffff" },
+  asia: { accent: "#ff6fa9", accent2: "#6bc0ff", accent3: "#ffe7a6", bg: "#fff4f8", panel: "#ffffff" },
+  oceania: { accent: "#ff8f4f", accent2: "#4fb5a8", accent3: "#ffd166", bg: "#fff4e6", panel: "#ffffff" }
+};
+
+const CONTINENT_PALETTE = {
+  NA: "americas",
+  SA: "americas",
+  EU: "europe",
+  AF: "africa",
+  AS: "asia",
+  OC: "oceania"
+};
+
+const GENERIC_COUNTRY_WORDS = [
+  "TRAVEL",
+  "JOURNEY",
+  "CULTURE",
+  "MARKET",
+  "RIVER",
+  "MOUNTAIN",
+  "VALLEY",
+  "FOREST",
+  "COAST",
+  "HARBOR",
+  "BRIDGE",
+  "GARDEN",
+  "MUSEUM",
+  "CASTLE",
+  "TEMPLE",
+  "VILLAGE",
+  "CITY",
+  "PLAZA",
+  "STREET",
+  "SUNSET",
+  "SUNRISE",
+  "ISLAND",
+  "BAY",
+  "LAKE",
+  "RAIN",
+  "SNOW",
+  "CLOUD",
+  "WIND",
+  "HORIZON",
+  "TRAIL"
 ];
+
+const CONTINENT_WORDS = {
+  americas: [
+    "CANYON",
+    "PRAIRIE",
+    "COAST",
+    "HARBOR",
+    "RIDGE",
+    "CREEK",
+    "PINE",
+    "LAKE",
+    "RIVER",
+    "VALLEY",
+    "TRAIL",
+    "ISLAND",
+    "CLIFF",
+    "MEADOW",
+    "PARK",
+    "ROAD",
+    "BRIDGE",
+    "SUMMIT",
+    "WATERFALL",
+    "BLOOM"
+  ],
+  europe: [
+    "CASTLE",
+    "VILLAGE",
+    "MARKET",
+    "RIVER",
+    "GARDEN",
+    "SQUARE",
+    "BRIDGE",
+    "CANAL",
+    "HARBOR",
+    "CHAPEL",
+    "FOREST",
+    "MEADOW",
+    "HILLS",
+    "ALLEY",
+    "TOWER",
+    "MUSEUM",
+    "PALACE",
+    "ISLAND",
+    "PLAZA",
+    "TRAIL"
+  ],
+  africa: [
+    "SAFARI",
+    "SAVANNA",
+    "OASIS",
+    "DESERT",
+    "DUNE",
+    "MARKET",
+    "PALM",
+    "COAST",
+    "RIVER",
+    "PLAIN",
+    "HARBOR",
+    "LAGOON",
+    "SUNSET",
+    "VILLAGE",
+    "GROVE",
+    "MEADOW",
+    "MOUNTAIN",
+    "VALLEY",
+    "TRAIL",
+    "ISLAND"
+  ],
+  asia: [
+    "TEMPLE",
+    "PALACE",
+    "MARKET",
+    "RIVER",
+    "GARDEN",
+    "BRIDGE",
+    "HARBOR",
+    "ISLAND",
+    "MOUNTAIN",
+    "PLAZA",
+    "ALLEY",
+    "PAGODA",
+    "SPICE",
+    "TEA",
+    "CANAL",
+    "FOREST",
+    "VALLEY",
+    "SUNRISE",
+    "TRAIL",
+    "SQUARE"
+  ],
+  oceania: [
+    "REEF",
+    "LAGOON",
+    "BEACH",
+    "ISLAND",
+    "COAST",
+    "HARBOR",
+    "TRAIL",
+    "FOREST",
+    "MOUNTAIN",
+    "VOLCANO",
+    "BAY",
+    "COVE",
+    "CORAL",
+    "SURF",
+    "CLIFF",
+    "WAVE",
+    "MEADOW",
+    "GROVE",
+    "SUNSET",
+    "RAIN"
+  ]
+};
+
+const BIOME_WORDS = {
+  arctic: ["SNOW", "AURORA", "ICE", "GLACIER", "FROST", "TUNDRA", "PINE", "FJORD", "WINTER", "LIGHTS"],
+  temperate: ["FOREST", "MEADOW", "HILL", "RIVER", "LAKE", "GARDEN", "TRAIL", "VALLEY", "BREEZE", "CLOUD"],
+  dry: ["DESERT", "DUNE", "OASIS", "SUN", "CANYON", "STONE", "RIDGE", "HORIZON", "PALM", "SAND"],
+  tropical: ["JUNGLE", "MONSOON", "LAGOON", "PALM", "RAIN", "REEF", "CANOPY", "RIVER", "BLOOM", "BREEZE"]
+};
+
+const GLOBAL_FILL_WORDS = [
+  "ADVENTURE",
+  "EXPLORE",
+  "COMPASS",
+  "PASSPORT",
+  "JOURNAL",
+  "WANDER",
+  "PATHWAY",
+  "DISTANCE",
+  "HORIZON",
+  "MILESTONE",
+  "SUNSHINE",
+  "BREEZE",
+  "GLIMMER",
+  "SPARK",
+  "TWILIGHT",
+  "STARLIGHT",
+  "MOONRISE",
+  "SEASIDE",
+  "BAYOU",
+  "HILLSIDE",
+  "PEAK",
+  "RIDGE",
+  "MEADOWS",
+  "WOODLAND",
+  "WATERWAY",
+  "MARINA",
+  "BOARDWALK",
+  "ISLET",
+  "COVE",
+  "SHORE",
+  "SHELL",
+  "CORAL",
+  "WILDLIFE",
+  "TRAILHEAD",
+  "LOOKOUT",
+  "SCENIC",
+  "CAMPFIRE",
+  "GLADE",
+  "GROVE",
+  "FERN",
+  "ORCHARD",
+  "HARVEST",
+  "FESTIVAL",
+  "MARKET",
+  "BOUTIQUE",
+  "SQUARE",
+  "PLAZA",
+  "CATHEDRAL",
+  "LANDMARK",
+  "SKYLINE",
+  "SUNSET",
+  "SUNRISE",
+  "RAINBOW",
+  "WILLOW",
+  "CANYON",
+  "GLACIER",
+  "SPRING",
+  "SUMMER",
+  "AUTUMN",
+  "WINTER"
+];
+
+const COUNTRY_SPECIFIC_WORDS = {
+  canada: ["MAPLE", "IGLOO", "AURORA", "ROCKIES", "BEAVER", "MOOSE", "PRAIRIE", "BAY", "TUNDRA"],
+  unitedstates: ["LIBERTY", "SKYLINE", "SUBWAY", "CANYON", "PRAIRIE", "COAST", "DESERT", "FOREST"],
+  mexico: ["AZTEC", "MURAL", "PUEBLO", "TACOS", "CANAL", "FIESTA", "TEMPLE"],
+  brazil: ["AMAZON", "CARNIVAL", "SAMBA", "JUNGLE", "BEACH", "HARBOR", "COPACABANA"],
+  argentina: ["TANGO", "PAMPAS", "GAUCHO", "MATE", "GLACIER", "ANDES"],
+  chile: ["ANDES", "FJORD", "PACIFIC", "VALLEY", "GLACIER", "VINE"],
+  peru: ["INCA", "CUSCO", "RUINS", "LLAMA", "TEMPLE", "MOUNTAIN"],
+  colombia: ["COFFEE", "EMERALD", "JUNGLE", "SIERRA", "HARBOR"],
+  unitedkingdom: ["CASTLE", "ABBEY", "HIGHLAND", "RIVER", "BRIDGE", "TEA"],
+  ireland: ["CLIFF", "GAELIC", "HARBOR", "MEADOW", "CASTLE"],
+  france: ["BISTRO", "BOULEVARD", "CATHEDRAL", "RIVER", "MUSEUM"],
+  spain: ["FLAMENCO", "PALACE", "PLAZA", "FIESTA", "SUNSET"],
+  italy: ["PIAZZA", "GELATO", "RUINS", "VILLA", "TEMPLE"],
+  greece: ["TEMPLE", "OLIVE", "ISLAND", "COAST", "RUINS"],
+  egypt: ["PYRAMID", "NILE", "DESERT", "SPHINX", "OASIS"],
+  kenya: ["SAFARI", "SAVANNA", "WILDLIFE", "RIFT", "PLAIN"],
+  southafrica: ["TABLE", "VINE", "SAFARI", "COAST", "MOUNTAIN"],
+  india: ["PALACE", "SPICE", "MONSOON", "TEMPLE", "BAZAAR"],
+  china: ["WALL", "TEMPLE", "PALACE", "GARDEN", "RIVER"],
+  japan: ["SAKURA", "TORII", "RAMEN", "SUSHI", "FUJI"],
+  thailand: ["TEMPLE", "CANAL", "ISLAND", "SPICE", "MARKET"],
+  vietnam: ["BAY", "TEMPLE", "FOREST", "ISLAND", "RIVER"],
+  indonesia: ["ISLAND", "VOLCANO", "TEMPLE", "JUNGLE", "COAST"],
+  philippines: ["ISLAND", "BEACH", "BAY", "COAST", "SUNSET"],
+  australia: ["KANGAROO", "KOALA", "OUTBACK", "REEF", "BEACH", "SURF"],
+  newzealand: ["FIORD", "TRAIL", "MOUNTAIN", "COAST", "FOREST"]
+};
+
+const COUNTRY_ICON_EMOJI = {
+  canada: "🍁",
+  unitedstates: "🗽",
+  mexico: "🌮",
+  brazil: "🌴",
+  argentina: "🧉",
+  chile: "🏔️",
+  peru: "🦙",
+  colombia: "☕",
+  unitedkingdom: "🫖",
+  ireland: "☘️",
+  france: "🗼",
+  spain: "💃",
+  portugal: "🚋",
+  italy: "🍝",
+  greece: "🏛️",
+  turkey: "🕌",
+  egypt: "🧱",
+  kenya: "🦒",
+  southafrica: "🦓",
+  india: "🪷",
+  china: "🐉",
+  japan: "🌸",
+  thailand: "🏝️",
+  vietnam: "🛶",
+  indonesia: "🌋",
+  philippines: "🏖️",
+  australia: "🦘",
+  newzealand: "🥾"
+};
+
+const COUNTRY_CITY_OVERRIDES = {
+  canada: ["Halifax", "Quebec", "Toronto", "Winnipeg", "Calgary", "Vancouver"],
+  australia: ["Brisbane", "Gold Coast", "Melbourne", "Canberra", "Sydney"],
+  unitedstates: ["New York", "Los Angeles", "Chicago", "Miami", "San Francisco", "Seattle", "Boston", "Las Vegas", "Honolulu"],
+  unitedkingdom: ["London", "Edinburgh", "Manchester", "Liverpool", "Belfast", "Bristol"],
+  france: ["Paris", "Nice", "Lyon", "Marseille", "Bordeaux", "Toulouse"],
+  spain: ["Madrid", "Barcelona", "Seville", "Valencia", "Bilbao", "Granada"],
+  italy: ["Rome", "Milan", "Venice", "Florence", "Naples", "Bologna"],
+  germany: ["Berlin", "Munich", "Hamburg", "Cologne", "Frankfurt", "Dresden"],
+  japan: ["Tokyo", "Kyoto", "Osaka", "Sapporo", "Fukuoka", "Hiroshima"],
+  china: ["Beijing", "Shanghai", "Xi'an", "Chengdu", "Guangzhou", "Shenzhen"],
+  india: ["Delhi", "Mumbai", "Jaipur", "Agra", "Goa", "Bengaluru"],
+  brazil: ["Rio de Janeiro", "Sao Paulo", "Salvador", "Brasilia", "Recife", "Fortaleza"],
+  mexico: ["Mexico City", "Cancun", "Guadalajara", "Monterrey", "Oaxaca", "Merida"],
+  egypt: ["Cairo", "Giza", "Luxor", "Aswan", "Alexandria"],
+  southafrica: ["Cape Town", "Johannesburg", "Durban", "Pretoria", "Knysna"],
+  turkey: ["Istanbul", "Ankara", "Izmir", "Antalya", "Cappadocia"],
+  thailand: ["Bangkok", "Chiang Mai", "Phuket", "Krabi", "Pattaya"],
+  vietnam: ["Hanoi", "Ho Chi Minh City", "Da Nang", "Hue", "Hoi An"],
+  philippines: ["Manila", "Cebu", "Boracay", "Palawan", "Davao"],
+  indonesia: ["Jakarta", "Bali", "Yogyakarta", "Bandung", "Surabaya"],
+  greece: ["Athens", "Santorini", "Mykonos", "Thessaloniki", "Crete"],
+  portugal: ["Lisbon", "Porto", "Sintra", "Faro", "Coimbra"],
+  netherlands: ["Amsterdam", "Rotterdam", "The Hague", "Utrecht", "Eindhoven"],
+  switzerland: ["Zurich", "Geneva", "Lucerne", "Bern", "Interlaken"],
+  austria: ["Vienna", "Salzburg", "Innsbruck", "Graz", "Hallstatt"],
+  sweden: ["Stockholm", "Gothenburg", "Malmo", "Uppsala", "Kiruna"],
+  norway: ["Oslo", "Bergen", "Trondheim", "Tromso", "Stavanger"],
+  denmark: ["Copenhagen", "Aarhus", "Odense", "Aalborg", "Roskilde"],
+  finland: ["Helsinki", "Tampere", "Turku", "Rovaniemi", "Oulu"],
+  poland: ["Warsaw", "Krakow", "Gdansk", "Wroclaw", "Poznan"],
+  ireland: ["Dublin", "Galway", "Cork", "Belfast", "Limerick"],
+  newzealand: ["Auckland", "Wellington", "Queenstown", "Christchurch", "Rotorua"],
+  argentina: ["Buenos Aires", "Mendoza", "Cordoba", "Bariloche", "Ushuaia"],
+  chile: ["Santiago", "Valparaiso", "Puerto Varas", "Punta Arenas", "Atacama"],
+  peru: ["Lima", "Cusco", "Arequipa", "Iquitos", "Puno"],
+  colombia: ["Bogota", "Medellin", "Cartagena", "Cali", "Santa Marta"],
+  kenya: ["Nairobi", "Mombasa", "Maasai Mara", "Nakuru", "Lamu"],
+  morocco: ["Marrakesh", "Casablanca", "Fes", "Chefchaouen", "Rabat"],
+  uae: ["Dubai", "Abu Dhabi", "Sharjah", "Al Ain"]
+};
+
+const CONTINENT_ICONS = {
+  americas: "🧭",
+  europe: "🏰",
+  africa: "🦁",
+  asia: "🎎",
+  oceania: "🌊"
+};
+
+const COUNTRIES = (window.COUNTRIES_DATA || [])
+  .filter((country) => !/russia|russian/i.test(country.name || "") && !/russia/i.test(country.id || ""))
+  .map((country) => ({
+    ...country,
+    palette: CONTINENT_PALETTE[country.continent] || "americas"
+  }));
+
+const DIFFICULTY_SETTINGS = [
+  { difficulty: 1, gridSize: 9 },
+  { difficulty: 2, gridSize: 11 },
+  { difficulty: 3, gridSize: 13 }
+];
+
+const COUNTRY_CITY_WORDS = new Map();
+
+function hashString(value) {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function seededShuffle(list, seed) {
+  const rng = mulberry32(seed);
+  const items = [...list];
+  for (let i = items.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  return items;
+}
+
+function getBiomeKey(lat) {
+  const abs = Math.abs(lat);
+  if (abs >= 60) return "arctic";
+  if (abs >= 35) return "temperate";
+  if (abs >= 15) return "dry";
+  return "tropical";
+}
+
+function normalizeWord(word) {
+  return word.toUpperCase().replace(/[^A-Z]/g, "");
+}
+
+function buildCountryWordPool(country, options = {}) {
+  const includeCity = options.includeCity !== false;
+  const tokens = (value) =>
+    value
+      .split(/\s+/)
+      .map((part) => normalizeWord(part))
+      .filter(Boolean);
+  const biome = BIOME_WORDS[getBiomeKey(country.lat)] || [];
+  const region = CONTINENT_WORDS[country.palette] || [];
+  const specific = COUNTRY_SPECIFIC_WORDS[country.id] || [];
+  const base = [
+    country.name,
+    ...(includeCity ? [country.city] : []),
+    ...tokens(country.name),
+    ...(includeCity ? tokens(country.city) : []),
+    ...specific,
+    ...region,
+    ...biome,
+    ...GENERIC_COUNTRY_WORDS,
+    ...GLOBAL_FILL_WORDS
+  ];
+  const unique = Array.from(new Set(base.map((w) => normalizeWord(w)).filter(Boolean)));
+  return unique;
+}
+
+function getCountryCities(country) {
+  const map = window.COUNTRY_CITIES || {};
+  const list = map[country.id] || [];
+  const overrides = COUNTRY_CITY_OVERRIDES[country.id] || [];
+  const deduped = [];
+  const seen = new Set();
+  overrides.concat(list).forEach((city) => {
+    const key = city.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    deduped.push(city);
+  });
+  if (!deduped.length && country.city) {
+    deduped.push(country.city);
+  }
+  const withCapital = country.city && !deduped.some((city) => city.toLowerCase() === country.city.toLowerCase())
+    ? [country.city, ...deduped]
+    : deduped;
+  return withCapital.slice(0, 9);
+}
+
+function splitWordsAcrossCities(country) {
+  if (COUNTRY_CITY_WORDS.has(country.id)) {
+    return COUNTRY_CITY_WORDS.get(country.id);
+  }
+  const cities = getCountryCities(country);
+  const pool = buildCountryWordPool(country, { includeCity: false });
+  const seed = hashString(country.id);
+  const shuffled = seededShuffle(pool, seed);
+  const minPer = 30;
+  const chunkSize = Math.max(minPer, Math.floor(shuffled.length / Math.max(1, cities.length)));
+  const buckets = new Map();
+  let cursor = 0;
+  cities.forEach((city) => {
+    let bucket = shuffled.slice(cursor, cursor + chunkSize);
+    cursor += chunkSize;
+    if (bucket.length < minPer) {
+      const needed = minPer - bucket.length;
+      const extras = shuffled.filter((word) => !bucket.includes(word)).slice(0, needed);
+      bucket = bucket.concat(extras);
+    }
+    buckets.set(city, bucket);
+  });
+  COUNTRY_CITY_WORDS.set(country.id, buckets);
+  return buckets;
+}
+
+function getCountryWordsForCity(country, city) {
+  const buckets = splitWordsAcrossCities(country);
+  const bucket = buckets.get(city);
+  const cityWord = normalizeWord(city);
+  if (bucket && bucket.length) {
+    if (cityWord && !bucket.includes(cityWord)) {
+      return [cityWord, ...bucket];
+    }
+    return bucket;
+  }
+  const fallback = buckets.values().next().value;
+  if (fallback) {
+    if (cityWord && !fallback.includes(cityWord)) {
+      return [cityWord, ...fallback];
+    }
+    return fallback;
+  }
+  return cityWord ? [cityWord, ...buildCountryWordPool(country)] : buildCountryWordPool(country);
+}
+
+function buildThemeForCountry(country, city, difficulty) {
+  return {
+    id: country.id,
+    name: country.name,
+    colors: PALETTES[country.palette] || PALETTES.americas,
+    words: getCountryWordsForCity(country, city)
+  };
+}
+
+function getCountryById(id) {
+  return COUNTRIES.find((country) => country.id === id);
+}
+
+function countryCodeToFlag(code) {
+  if (!code || code.length !== 2) return "🌍";
+  const base = 127397;
+  const chars = code.toUpperCase().split("");
+  return String.fromCodePoint(...chars.map((char) => base + char.charCodeAt(0)));
+}
+
+function getCountryIcon(country) {
+  return COUNTRY_ICON_EMOJI[country.id] || CONTINENT_ICONS[country.palette] || "🧭";
+}
+
+function buildSilhouetteDataUrl(seed) {
+  const rng = mulberry32(seed);
+  const points = 8;
+  const radius = 46;
+  const jitter = 18;
+  const center = 60;
+  let path = "";
+  for (let i = 0; i < points; i += 1) {
+    const angle = (Math.PI * 2 * i) / points;
+    const r = radius + (rng() - 0.5) * jitter;
+    const x = center + Math.cos(angle) * r;
+    const y = center + Math.sin(angle) * r;
+    path += i === 0 ? `M${x.toFixed(1)},${y.toFixed(1)}` : `L${x.toFixed(1)},${y.toFixed(1)}`;
+  }
+  path += "Z";
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><path d='${path}' fill='none' stroke='white' stroke-width='2' opacity='0.6'/></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+function buildCampaignLevels() {
+  const levels = [];
+  COUNTRIES.forEach((country) => {
+    const cities = getCountryCities(country);
+    const total = Math.max(1, cities.length);
+    cities.forEach((city, index) => {
+      const seed = hashString(`${country.id}-${city}`);
+      const rng = mulberry32(seed);
+      const difficulty = 1 + Math.floor(rng() * DIFFICULTY_SETTINGS.length);
+      const setting = DIFFICULTY_SETTINGS[difficulty - 1];
+      const angle = (index / total) * Math.PI * 2;
+      const radius = 0.45 + (index % 3) * 0.2;
+      const id = `${country.id}-${city.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+      levels.push({
+        id,
+        countryId: country.id,
+        city,
+        country: country.name,
+        lat: country.lat + Math.sin(angle) * radius,
+        lon: country.lon + Math.cos(angle) * radius,
+        gridSize: setting.gridSize,
+        words: setting.gridSize,
+        difficulty
+      });
+    });
+  });
+  return levels;
+}
+
+const CAMPAIGN_LEVELS = buildCampaignLevels();
+const FIRST_CAMPAIGN_ID = CAMPAIGN_LEVELS[0]?.id || "canada-halifax";
 
 const boardEl = document.getElementById("board");
 const wordListEl = document.getElementById("wordList");
@@ -552,6 +960,7 @@ const planeEl = document.getElementById("plane");
 const mapLevel = document.getElementById("mapLevel");
 const mapTotalWords = document.getElementById("mapTotalWords");
 const freePlayBtn = document.getElementById("freePlayBtn");
+const newCampaignBtn = document.getElementById("newCampaignBtn");
 const mapBackBtn = document.getElementById("mapBackBtn");
 const screenMap = document.getElementById("screenMap");
 const screenPlay = document.getElementById("screenPlay");
@@ -584,7 +993,6 @@ let startCell = null;
 let currentPointerId = null;
 let activeTheme = THEMES[0];
 let mode = "free";
-let currentLevelIndex = 0;
 let lastTick = Date.now();
 let xpPinned = false;
 let returnToWin = false;
@@ -605,8 +1013,11 @@ let lastDragTime = 0;
 let earthTexture = null;
 let earthImageData = null;
 let lastRenderedRotation = null;
+let currentLevelIndex = 0;
+let nextCampaignId = null;
 
 const stats = loadStats();
+normalizeCampaignStats();
 applyTheme(findTheme(stats.themeId) || activeTheme);
 
 function loadStats() {
@@ -627,8 +1038,58 @@ function loadStats() {
     totalTime: 0,
     themeId: THEMES[0].id,
     campaignUnlocked: 0,
-    campaignCompleted: []
+    campaignCompleted: [],
+    themeUsedWords: {},
+    lastFreeWords: [],
+    globalUsedWords: [],
+    freeHistory: [],
+    campaignUnlockedIds: [],
+    campaignCompletedIds: [],
+    currentCampaignId: null,
+    campaignSeed: null,
+    campaignStep: 0
   };
+}
+
+function normalizeCampaignStats() {
+  if (!stats.campaignUnlockedIds || !Array.isArray(stats.campaignUnlockedIds)) {
+    stats.campaignUnlockedIds = [];
+  }
+  if (!stats.campaignCompletedIds || !Array.isArray(stats.campaignCompletedIds)) {
+    stats.campaignCompletedIds = [];
+  }
+  if (!stats.currentCampaignId) {
+    stats.currentCampaignId = null;
+  }
+  if (typeof stats.campaignSeed !== "number") {
+    stats.campaignSeed = Math.floor(Math.random() * 1e9);
+  }
+  if (typeof stats.campaignStep !== "number") {
+    stats.campaignStep = 0;
+  }
+  const validIds = new Set(CAMPAIGN_LEVELS.map((level) => level.id));
+  stats.campaignUnlockedIds = stats.campaignUnlockedIds.filter((id) => validIds.has(id));
+  stats.campaignCompletedIds = stats.campaignCompletedIds.filter((id) => validIds.has(id));
+  if (typeof stats.campaignUnlocked === "number" && stats.campaignUnlocked > 0) {
+    const unlocked = CAMPAIGN_LEVELS.slice(0, stats.campaignUnlocked + 1).map((level) => level.id);
+    stats.campaignUnlockedIds = Array.from(new Set([...stats.campaignUnlockedIds, ...unlocked]));
+  }
+  if (Array.isArray(stats.campaignCompleted) && stats.campaignCompleted.length) {
+    const completed = stats.campaignCompleted
+      .map((idx) => CAMPAIGN_LEVELS[idx])
+      .filter(Boolean)
+      .map((level) => level.id);
+    stats.campaignCompletedIds = Array.from(new Set([...stats.campaignCompletedIds, ...completed]));
+  }
+  if (!stats.campaignUnlockedIds.length) {
+    stats.campaignUnlockedIds = [FIRST_CAMPAIGN_ID];
+  }
+  if (!stats.currentCampaignId) {
+    stats.currentCampaignId = stats.campaignUnlockedIds[0];
+  }
+  if (!CAMPAIGN_LEVELS.some((level) => level.id === stats.currentCampaignId)) {
+    stats.currentCampaignId = stats.campaignUnlockedIds[0];
+  }
 }
 
 function saveStats() {
@@ -720,10 +1181,35 @@ function shuffle(array) {
   return array;
 }
 
-function pickWords(size, pool, count) {
-  const maxWords = count || clamp(Math.floor(size * 0.8), 6, 12);
-  const usable = pool.filter((word) => word.length <= size);
-  return shuffle([...usable]).slice(0, maxWords).map((word) => word.toUpperCase());
+function pickWords(size, pool, count, options) {
+  const maxWords = count || size;
+  const usable = pool.filter((word) => word.length <= size).map((word) => word.toUpperCase());
+  const minLongRatio = options?.minLongRatio || 0;
+  if (!minLongRatio) {
+    return shuffle([...usable]).slice(0, maxWords);
+  }
+  const longMin = Math.min(options?.longMin || 7, size);
+  const longWords = usable.filter((word) => word.length >= longMin);
+  const shortWords = usable.filter((word) => word.length < longMin);
+  const neededLong = Math.min(longWords.length, Math.ceil(maxWords * minLongRatio));
+  const pickedLong = shuffle([...longWords]).slice(0, neededLong);
+  const pickedLongSet = new Set(pickedLong);
+  const remaining = shuffle([
+    ...shortWords,
+    ...longWords.filter((word) => !pickedLongSet.has(word))
+  ]).slice(0, Math.max(0, maxWords - pickedLong.length));
+  return shuffle([...pickedLong, ...remaining]).slice(0, maxWords);
+}
+
+function pickUniqueWords(size, pool, count, usedSet, options) {
+  const maxWords = count || size;
+  const usable = pool.filter((word) => word.length <= size).map((w) => w.toUpperCase());
+  const unused = usable.filter((word) => !usedSet.has(word));
+  if (unused.length < maxWords) {
+    usedSet.clear();
+  }
+  const fresh = usable.filter((word) => !usedSet.has(word));
+  return pickWords(size, fresh, Math.min(maxWords, fresh.length), options);
 }
 
 function emptyGrid(size) {
@@ -773,8 +1259,10 @@ function fillRandom(board) {
   }
 }
 
-function buildBoard(size, wordPool, count) {
-  words = pickWords(size, wordPool, count);
+function buildBoard(size, wordPool, count, usedSet, options) {
+  words = usedSet
+    ? pickUniqueWords(size, wordPool, count, usedSet, options)
+    : pickWords(size, wordPool, count, options);
   grid = emptyGrid(size);
   const sorted = [...words].sort((a, b) => b.length - a.length);
   sorted.forEach((word) => {
@@ -1012,12 +1500,44 @@ function rebuild() {
   foundWords = new Set();
   minorFound = new Set();
   updateScore();
-  const pool =
-    mode === "campaign"
-      ? activeTheme.words
-      : Array.from(new Set(DEFAULT_WORDS.concat(activeTheme.words)));
-  const count = mode === "campaign" ? CAMPAIGN_LEVELS[currentLevelIndex].words : undefined;
-  buildBoard(gridSize, pool, count);
+  const allThemeWords = COUNTRIES.flatMap((country) => buildCountryWordPool(country, { includeCity: false }));
+  const freePool = Array.from(new Set(DEFAULT_WORDS.concat(allThemeWords)));
+  const pool = mode === "campaign" ? activeTheme.words : freePool;
+  const count = mode === "campaign" ? Math.min(gridSize, activeTheme.words.length) : Math.min(gridSize, pool.length);
+  if (mode === "campaign") {
+    const key = stats.currentCampaignId || activeTheme.id;
+    if (!stats.themeUsedWords[key]) stats.themeUsedWords[key] = [];
+    const usedSet = new Set(stats.themeUsedWords[key]);
+    const globalSet = new Set(stats.globalUsedWords || []);
+    const mergedSet = new Set([...usedSet, ...globalSet]);
+    buildBoard(gridSize, pool, count, mergedSet);
+    stats.themeUsedWords[key] = Array.from(new Set([...usedSet, ...words]));
+    stats.globalUsedWords = Array.from(new Set([...globalSet, ...words]));
+    saveStats();
+  } else {
+    let attempts = 8;
+    let current = [];
+    let maxWords = count || gridSize;
+    const previous = new Set(stats.lastFreeWords || []);
+    const globalSet = new Set(stats.globalUsedWords || []);
+    const historyList = stats.freeHistory || [];
+    const historySet = new Set(historyList.flat());
+    const minUnique = Math.min(10, maxWords);
+    do {
+      const usedSet = new Set([...previous, ...globalSet, ...historySet]);
+      buildBoard(gridSize, pool, count, usedSet, { minLongRatio: 0.3, longMin: 7 });
+      current = words;
+      const overlap = current.filter((w) => previous.has(w)).length;
+      const uniqueCount = current.length - overlap;
+      if (uniqueCount >= minUnique) break;
+      attempts -= 1;
+    } while (attempts > 0);
+    stats.lastFreeWords = current;
+    stats.globalUsedWords = Array.from(new Set([...globalSet, ...current]));
+    historyList.unshift(current);
+    stats.freeHistory = historyList.slice(0, 15);
+    saveStats();
+  }
   renderBoard();
   renderWordList();
   hintEl.textContent = "Drag across letters in a straight line.";
@@ -1037,16 +1557,23 @@ function showScreen(screen) {
   }
 }
 
-function startCampaignLevel(index) {
+function startCampaignLevel(idOrIndex) {
+  const index = typeof idOrIndex === "number" ? idOrIndex : getCampaignIndexById(idOrIndex);
+  if (index < 0) return;
   mode = "campaign";
   currentLevelIndex = index;
   const level = CAMPAIGN_LEVELS[index];
-  const theme = findTheme(level.themeId);
-  if (theme) applyTheme(theme);
+  stats.currentCampaignId = level.id;
+  const country = getCountryById(level.countryId);
+  if (country) {
+    const theme = buildThemeForCountry(country, level.city, level.difficulty);
+    applyTheme(theme);
+  }
   gridSize = level.gridSize;
   gridSizeInput.value = String(gridSize);
   rebuild();
   showScreen("play");
+  saveStats();
 }
 
 function renderMap() {
@@ -1055,25 +1582,43 @@ function renderMap() {
   globePins = [];
   mapLevel.textContent = String(stats.level);
   mapTotalWords.textContent = String(stats.totalWords);
+  currentLevelIndex = getCampaignIndexById(stats.currentCampaignId);
+  if (currentLevelIndex < 0) currentLevelIndex = 0;
   CAMPAIGN_LEVELS.forEach((level, index) => {
     const item = document.createElement("div");
     item.className = "map-item";
-    const theme = findTheme(level.themeId);
-    const unlocked = index <= stats.campaignUnlocked;
-    const completed = stats.campaignCompleted.includes(index);
+    const theme = getCountryById(level.countryId);
+    const palette = theme ? PALETTES[theme.palette] || PALETTES.americas : PALETTES.americas;
+    const unlocked = stats.campaignUnlockedIds.includes(level.id) || stats.campaignCompletedIds.includes(level.id);
+    const completed = stats.campaignCompletedIds.includes(level.id);
     item.dataset.level = String(index);
     if (!unlocked) item.classList.add("locked");
     if (index === currentLevelIndex) item.classList.add("current");
+    if (palette) {
+      item.style.setProperty("--item-accent", palette.accent);
+      item.style.setProperty("--item-accent-2", palette.accent2);
+      item.style.setProperty("--item-accent-3", palette.accent3);
+    }
+    if (theme) {
+      item.style.setProperty("--item-silhouette", `url('${buildSilhouetteDataUrl(hashString(level.id))}')`);
+    }
+    const flag = theme ? countryCodeToFlag(theme.alpha2) : "🌍";
+    const icon = theme ? getCountryIcon(theme) : "🧭";
     item.innerHTML = `
-      <strong>${level.city}, ${level.country}</strong>
-      <small>${theme ? theme.name : "Theme"} · Grid ${level.gridSize} · ${level.words} words</small>
-      <small>${completed ? "Completed" : unlocked ? "Unlocked" : "Locked"}</small>
+      <div class="map-silhouette"></div>
+      <div class="map-item-header">
+        <span class="map-flag" aria-hidden="true">${flag}</span>
+        <strong>${level.city}, ${level.country}</strong>
+        <span class="map-icon" aria-hidden="true">${icon}</span>
+      </div>
+      <small>${theme ? theme.name : "Theme"} · ${level.difficulty === 1 ? "Easy" : level.difficulty === 2 ? "Medium" : "Hard"}</small>
+      <small>Grid ${level.gridSize} · ${level.words} words · ${completed ? "Completed" : unlocked ? "Unlocked" : "Locked"}</small>
     `;
     item.addEventListener("click", () => {
       focusGlobeOnLevel(index);
       moveLevelToTop(index);
       if (unlocked) {
-        startCampaignLevel(index);
+        startCampaignLevel(level.id);
       }
     });
     mapList.appendChild(item);
@@ -1094,7 +1639,7 @@ function renderMap() {
       }
       lastPinIndex = index;
       if (unlocked) {
-        startCampaignLevel(index);
+        startCampaignLevel(level.id);
       }
     });
     globeEl.appendChild(pin);
@@ -1107,11 +1652,13 @@ function completeRound() {
   addXp(XP_COMPLETE);
   hintEl.textContent = `Round complete! +${XP_COMPLETE} XP`;
   if (mode === "campaign") {
-    if (!stats.campaignCompleted.includes(currentLevelIndex)) {
-      stats.campaignCompleted.push(currentLevelIndex);
+    const currentId = stats.currentCampaignId;
+    if (currentId && !stats.campaignCompletedIds.includes(currentId)) {
+      stats.campaignCompletedIds.push(currentId);
     }
-    if (stats.campaignUnlocked < currentLevelIndex + 1) {
-      stats.campaignUnlocked = currentLevelIndex + 1;
+    nextCampaignId = pickNextCampaignLevel();
+    if (nextCampaignId && !stats.campaignUnlockedIds.includes(nextCampaignId)) {
+      stats.campaignUnlockedIds.push(nextCampaignId);
     }
     saveStats();
   }
@@ -1144,6 +1691,43 @@ function renderThemeOptions() {
 
 function toRadians(deg) {
   return (deg * Math.PI) / 180;
+}
+
+function getCampaignIndexById(id) {
+  return CAMPAIGN_LEVELS.findIndex((level) => level.id === id);
+}
+
+function mulberry32(seed) {
+  return function () {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function seededRandom() {
+  const rng = mulberry32(stats.campaignSeed + stats.campaignStep);
+  stats.campaignStep += 1;
+  return rng();
+}
+
+function pickNextCampaignLevel() {
+  const completed = new Set(stats.campaignCompletedIds);
+  const available = CAMPAIGN_LEVELS.filter((level) => !completed.has(level.id));
+  if (!available.length) return null;
+  const current = CAMPAIGN_LEVELS[getCampaignIndexById(stats.currentCampaignId)];
+  const currentDifficulty = current ? current.difficulty : 1;
+  const targetDifficulty = Math.min(3, currentDifficulty + (seededRandom() < 0.5 ? 0 : 1));
+  let pool = available.filter((level) => level.difficulty === targetDifficulty);
+  if (!pool.length) {
+    pool = available.filter((level) => level.difficulty === currentDifficulty);
+  }
+  if (!pool.length) {
+    pool = available;
+  }
+  const idx = Math.floor(seededRandom() * pool.length);
+  return pool[idx].id;
 }
 
 function latLonToVec(lat, lon, rotation) {
@@ -1203,7 +1787,11 @@ function renderGlobeTexture(rotation) {
         continue;
       }
       const z = Math.sqrt(1 - r2);
-      const lon = Math.atan2(nx, z) + rotation;
+      if (z <= 0) {
+        data[idx + 3] = 0;
+        continue;
+      }
+      const lon = Math.atan2(-nx, z) - rotation;
       const lat = Math.asin(ny);
       let u = lon / (2 * Math.PI) + 0.5;
       u -= Math.floor(u);
@@ -1211,8 +1799,9 @@ function renderGlobeTexture(rotation) {
       const texX = Math.floor(u * (texW - 1));
       const texY = Math.floor(v * (texH - 1));
       const tIdx = (texY * texW + texX) * 4;
-      const shade = Math.max(0.25, nx * lx + ny * ly + z * lz);
-      const shadow = 0.65 + 0.35 * shade;
+      const shade = Math.max(0.2, nx * lx + ny * ly + z * lz);
+      const limb = 0.35 + 0.65 * z;
+      const shadow = shade * limb;
       data[idx] = tex[tIdx] * shadow;
       data[idx + 1] = tex[tIdx + 1] * shadow;
       data[idx + 2] = tex[tIdx + 2] * shadow;
@@ -1439,6 +2028,18 @@ freePlayBtn.addEventListener("click", () => {
   showScreen("play");
 });
 
+newCampaignBtn.addEventListener("click", () => {
+  stats.campaignCompletedIds = [];
+  stats.campaignUnlockedIds = [FIRST_CAMPAIGN_ID];
+  stats.currentCampaignId = FIRST_CAMPAIGN_ID;
+  stats.campaignSeed = Math.floor(Math.random() * 1e9);
+  stats.campaignStep = 0;
+  stats.themeUsedWords = {};
+  nextCampaignId = null;
+  saveStats();
+  renderMap();
+});
+
 resizeClose.addEventListener("click", () => {
   resizeModal.classList.remove("active");
 });
@@ -1485,10 +2086,11 @@ winMap.addEventListener("click", () => {
 winNext.addEventListener("click", () => {
   winScreen.classList.remove("active");
   if (mode === "campaign") {
-    const next = currentLevelIndex + 1;
-    if (next < CAMPAIGN_LEVELS.length) {
+    const nextId = nextCampaignId || pickNextCampaignLevel();
+    if (nextId) {
+      const nextIndex = getCampaignIndexById(nextId);
       showScreen("map");
-      animateTravel(currentLevelIndex, next, () => startCampaignLevel(next));
+      animateTravel(currentLevelIndex, nextIndex, () => startCampaignLevel(nextId));
     } else {
       showScreen("map");
     }
@@ -1516,6 +2118,7 @@ levelRing.addEventListener("mouseleave", () => {
   if (!xpPinned) wordPanel.classList.remove("show-xp");
 });
 
+loadMinorWords();
 renderMap();
 rebuild();
 updateXpUI();

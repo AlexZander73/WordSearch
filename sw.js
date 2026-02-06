@@ -1,9 +1,12 @@
-const CACHE_NAME = "wordsearch-v1";
+const CACHE_NAME = "wordsearch-v3";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./data/countries-data.js",
+  "./data/minor-words.txt",
+  "./data/country-cities.js",
   "./manifest.json",
   "./icon.svg",
   "./icon-192.png",
