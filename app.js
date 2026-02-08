@@ -749,6 +749,22 @@ function normalizeWord(word) {
   return word.toUpperCase().replace(/[^A-Z]/g, "");
 }
 
+function getCountryCentroid(country) {
+  const north = Number(country.north);
+  const south = Number(country.south);
+  const west = Number(country.west);
+  const east = Number(country.east);
+  if ([north, south, west, east].some((val) => Number.isNaN(val))) {
+    return { lat: country.lat || 0, lon: country.lon || 0 };
+  }
+  const lat = (north + south) / 2;
+  let adjustedEast = east;
+  if (east < west) adjustedEast += 360;
+  let lon = (adjustedEast + west) / 2;
+  if (lon > 180) lon -= 360;
+  return { lat, lon };
+}
+
 function buildCountryWordPool(country, options = {}) {
   const includeCity = options.includeCity !== false;
   const tokens = (value) =>
@@ -756,7 +772,8 @@ function buildCountryWordPool(country, options = {}) {
       .split(/\s+/)
       .map((part) => normalizeWord(part))
       .filter(Boolean);
-  const biome = BIOME_WORDS[getBiomeKey(country.lat)] || [];
+  const centroid = getCountryCentroid(country);
+  const biome = BIOME_WORDS[getBiomeKey(centroid.lat)] || [];
   const region = CONTINENT_WORDS[country.palette] || [];
   const specific = COUNTRY_SPECIFIC_WORDS[country.id] || [];
   const base = [
@@ -894,16 +911,39 @@ function buildCampaignLevels() {
       const rng = mulberry32(seed);
       const difficulty = 1 + Math.floor(rng() * DIFFICULTY_SETTINGS.length);
       const setting = DIFFICULTY_SETTINGS[difficulty - 1];
-      const angle = (index / total) * Math.PI * 2;
-      const radius = 0.45 + (index % 3) * 0.2;
+      const north = Number(country.north);
+      const south = Number(country.south);
+      const west = Number(country.west);
+      const east = Number(country.east);
+      const hasBounds = ![north, south, west, east].some((val) => Number.isNaN(val));
+      let lat;
+      let lon;
+      if (hasBounds) {
+        const latMin = Math.min(north, south);
+        const latMax = Math.max(north, south);
+        const latPad = Math.max(0.2, (latMax - latMin) * 0.08);
+        lat = latMin + latPad + rng() * Math.max(0.1, latMax - latMin - latPad * 2);
+        let eastAdj = east;
+        if (east < west) eastAdj += 360;
+        const lonSpan = eastAdj - west;
+        const lonPad = Math.max(0.2, lonSpan * 0.08);
+        lon = west + lonPad + rng() * Math.max(0.1, lonSpan - lonPad * 2);
+        if (lon > 180) lon -= 360;
+      } else {
+        const centroid = getCountryCentroid(country);
+        const angle = (index / total) * Math.PI * 2;
+        const radius = 0.45 + (index % 3) * 0.2;
+        lat = centroid.lat + Math.sin(angle) * radius;
+        lon = centroid.lon + Math.cos(angle) * radius;
+      }
       const id = `${country.id}-${city.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
       levels.push({
         id,
         countryId: country.id,
         city,
         country: country.name,
-        lat: country.lat + Math.sin(angle) * radius,
-        lon: country.lon + Math.cos(angle) * radius,
+        lat,
+        lon,
         gridSize: setting.gridSize,
         words: setting.gridSize,
         difficulty
@@ -1791,7 +1831,7 @@ function renderGlobeTexture(rotation) {
         data[idx + 3] = 0;
         continue;
       }
-      const lon = Math.atan2(-nx, z) - rotation;
+      const lon = Math.atan2(nx, z) - rotation;
       const lat = Math.asin(ny);
       let u = lon / (2 * Math.PI) + 0.5;
       u -= Math.floor(u);
@@ -1799,8 +1839,12 @@ function renderGlobeTexture(rotation) {
       const texX = Math.floor(u * (texW - 1));
       const texY = Math.floor(v * (texH - 1));
       const tIdx = (texY * texW + texX) * 4;
+      if (z < 0.02) {
+        data[idx + 3] = 0;
+        continue;
+      }
       const shade = Math.max(0.2, nx * lx + ny * ly + z * lz);
-      const limb = 0.35 + 0.65 * z;
+      const limb = 0.45 + 0.55 * z;
       const shadow = shade * limb;
       data[idx] = tex[tIdx] * shadow;
       data[idx + 1] = tex[tIdx + 1] * shadow;
